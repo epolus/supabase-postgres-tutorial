@@ -43,8 +43,6 @@ posts >──< tags   (via post_tags)
 - RLS with `(select auth.uid())`; views with `security_invoker = true`
 - `SECURITY DEFINER` functions set `search_path = ''`
 
-See [`.cursor/rules/supabase-tutorial.mdc`](./.cursor/rules/supabase-tutorial.mdc) for the full rule set.
-
 ## Prerequisites
 
 - A free [Supabase](https://supabase.com) project (or local Supabase CLI stack)

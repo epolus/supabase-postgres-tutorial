@@ -1,6 +1,7 @@
 # Practice Exercise Answers
 
 Spoiler file: solutions extracted from the lesson files so you can try the **Practice Exercises** first.
+Prefer [`HINTS.md`](./HINTS.md) before opening a solution.
 
 Each section mirrors the lesson path under the module folders.
 

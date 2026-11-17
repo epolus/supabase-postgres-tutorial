@@ -49,4 +49,4 @@ RETURNING id, slug;
 -- 1. Insert a comment from Alice on Bob's draft post; RETURNING id.
 -- 2. Update Bob's draft title to 'Draft: Better Indexes' by slug.
 -- -----------------------------------------------------------------------------
--- Solutions: see ANSWERS.md (same lesson path).
+-- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

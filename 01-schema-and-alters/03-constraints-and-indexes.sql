@@ -76,4 +76,4 @@ CREATE INDEX IF NOT EXISTS post_tags_tag_id_idx
 -- 1. Add a CHECK that profiles.username is at least 3 characters.
 -- 2. Create an index on tags(name) — or explain why UNIQUE already covers it.
 -- -----------------------------------------------------------------------------
--- Solutions: see ANSWERS.md (same lesson path).
+-- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

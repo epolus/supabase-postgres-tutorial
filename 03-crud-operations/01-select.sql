@@ -35,4 +35,4 @@ GROUP BY author_id;
 -- 1. Select titles of unpublished posts only.
 -- 2. Select the two most recent comments (any post).
 -- -----------------------------------------------------------------------------
--- Solutions: see ANSWERS.md (same lesson path).
+-- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

@@ -34,4 +34,4 @@ ORDER BY c.relname;
 -- 1. Enable RLS on public.bookmarks if you created that practice table in 01.
 -- 2. Query pg_policies for public.posts (expect few/none until lesson 02).
 -- -----------------------------------------------------------------------------
--- Solutions: see ANSWERS.md (same lesson path).
+-- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

@@ -61,4 +61,4 @@ ORDER BY p.title;
 -- 2. LEFT JOIN profiles to posts so you could spot posts with a missing author
 --    (should be empty if FKs are healthy).
 -- -----------------------------------------------------------------------------
--- Solutions: see ANSWERS.md (same lesson path).
+-- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

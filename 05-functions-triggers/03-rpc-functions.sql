@@ -51,4 +51,4 @@ GRANT EXECUTE ON FUNCTION public.publish_my_drafts() TO authenticated;
 -- 1. Write public.latest_posts(limit_count int) returning id, title, slug.
 -- 2. GRANT EXECUTE on it to authenticated.
 -- -----------------------------------------------------------------------------
--- Solutions: see ANSWERS.md (same lesson path).
+-- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

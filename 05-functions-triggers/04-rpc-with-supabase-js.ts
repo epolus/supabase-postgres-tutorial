@@ -52,5 +52,5 @@ main().catch((err) => {
  * 1. Call latest_posts with limit_count: 5 (after creating it in 03).
  * 2. Log a clear message when error is non-null vs when data is empty.
  *
- * Solutions: see ANSWERS.md (same lesson path).
+ * Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).
  * --------------------------------------------------------------------------- */

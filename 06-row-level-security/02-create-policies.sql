@@ -153,4 +153,4 @@ CREATE POLICY "post_tags_delete_post_author"
 -- 2. Rewrite one policy using bare auth.uid(), then change it to
 --    (select auth.uid()) and note why the select form is preferred.
 -- -----------------------------------------------------------------------------
--- Solutions: see ANSWERS.md (same lesson path).
+-- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

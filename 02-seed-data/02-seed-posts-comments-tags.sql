@@ -75,4 +75,4 @@ SET body = EXCLUDED.body;
 -- 1. Seed a third published post by Alice with slug 'rls-basics'.
 -- 2. Tag that post with 'supabase' only, using ON CONFLICT DO NOTHING.
 -- -----------------------------------------------------------------------------
--- Solutions: see ANSWERS.md (same lesson path).
+-- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

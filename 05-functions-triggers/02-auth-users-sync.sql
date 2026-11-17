@@ -68,4 +68,4 @@ WHERE id = '44444444-4444-4444-4444-444444444444';
 -- 1. Extend handle_new_user to copy bio from raw_user_meta_data->>'bio' when set.
 -- 2. Explain why ON CONFLICT DO NOTHING is useful if you also seed profiles.
 -- -----------------------------------------------------------------------------
--- Solutions: see ANSWERS.md (same lesson path).
+-- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

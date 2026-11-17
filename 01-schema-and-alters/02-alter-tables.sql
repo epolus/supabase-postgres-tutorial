@@ -46,4 +46,4 @@ ALTER TABLE public.posts
 -- 1. Add comments.updated_at timestamptz with DEFAULT now() if missing.
 -- 2. Backfill NULL updated_at on comments to now() safely.
 -- -----------------------------------------------------------------------------
--- Solutions: see ANSWERS.md (same lesson path).
+-- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

@@ -51,4 +51,4 @@ ORDER BY comment_count DESC, title;
 -- 1. Create view public.post_tags_list (security_invoker) with post slug + tag name.
 -- 2. SELECT from it ordered by slug, name.
 -- -----------------------------------------------------------------------------
--- Solutions: see ANSWERS.md (same lesson path).
+-- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

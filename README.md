@@ -11,7 +11,7 @@ Beginners who can run SQL in the Supabase SQL Editor (or `psql`) and want produc
 1. Open your Supabase project → **SQL Editor**.
 2. Start with module `01` and run the lesson files in numeric order.
 3. Read each module’s `README.md` for **Learning Objectives** and **Prerequisites**.
-4. Try the **Practice Exercises** at the end of each lesson before peeking at [`ANSWERS.md`](./ANSWERS.md).
+4. Try the **Practice Exercises** at the end of each lesson. If stuck, peek at [`HINTS.md`](./HINTS.md); full solutions are in [`ANSWERS.md`](./ANSWERS.md).
 5. When a lesson shows both SQL and TypeScript, learn the SQL first, then the `@supabase/supabase-js` equivalent.
 
 | Module | Topic |

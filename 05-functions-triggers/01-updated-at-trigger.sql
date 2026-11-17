@@ -50,4 +50,4 @@ RETURNING id, slug, updated_at;
 -- 1. Add updated_at to public.profiles if missing and attach the same trigger.
 -- 2. UPDATE alice's bio and RETURNING updated_at.
 -- -----------------------------------------------------------------------------
--- Solutions: see ANSWERS.md (same lesson path).
+-- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

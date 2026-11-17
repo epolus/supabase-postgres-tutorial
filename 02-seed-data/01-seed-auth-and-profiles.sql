@@ -92,4 +92,4 @@ SET
 -- 1. Seed a third user + profile (carol) with a new fixed uuid.
 -- 2. Make the profile upsert also refresh username from EXCLUDED.
 -- -----------------------------------------------------------------------------
--- Solutions: see ANSWERS.md (same lesson path).
+-- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

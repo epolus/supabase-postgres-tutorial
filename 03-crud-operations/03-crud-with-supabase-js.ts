@@ -100,5 +100,5 @@ main().catch((err) => {
  * 1. Fetch profile username + display_name for alice.
  * 2. Update comment c1111111-... body via .update().eq('id', ...).
  *
- * Solutions: see ANSWERS.md (same lesson path).
+ * Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).
  * --------------------------------------------------------------------------- */

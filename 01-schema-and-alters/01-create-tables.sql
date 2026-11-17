@@ -53,4 +53,4 @@ CREATE TABLE IF NOT EXISTS public.post_tags (
 -- 1. Add a table public.bookmarks with id, profile_id, post_id, and created_at.
 -- 2. Ensure bookmarks uniquely pair one profile with one post.
 -- -----------------------------------------------------------------------------
--- Solutions: see ANSWERS.md (same lesson path).
+-- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

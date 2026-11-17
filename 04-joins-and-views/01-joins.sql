@@ -60,5 +60,6 @@ ORDER BY p.title;
 -- 1. List each comment with the post slug and the commenter's display_name.
 -- 2. LEFT JOIN profiles to posts so you could spot posts with a missing author
 --    (should be empty if FKs are healthy).
+-- 3. List posts that have no tags (LEFT JOIN post_tags, filter where the join is NULL).
 -- -----------------------------------------------------------------------------
 -- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

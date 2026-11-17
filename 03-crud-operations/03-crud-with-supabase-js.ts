@@ -99,6 +99,7 @@ main().catch((err) => {
  * Practice Exercises
  * 1. Fetch profile username + display_name for alice.
  * 2. Update comment c1111111-... body via .update().eq('id', ...).
+ * 3. Delete an unpublished draft by slug via .delete().eq('slug', ...).eq('published', false).
  *
  * Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).
  * --------------------------------------------------------------------------- */

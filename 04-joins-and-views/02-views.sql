@@ -50,5 +50,6 @@ ORDER BY comment_count DESC, title;
 -- Practice Exercises
 -- 1. Create view public.post_tags_list (security_invoker) with post slug + tag name.
 -- 2. SELECT from it ordered by slug, name.
+-- 3. Create view public.tag_post_counts (security_invoker) with tag name + COUNT of posts.
 -- -----------------------------------------------------------------------------
 -- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

@@ -48,5 +48,7 @@ RETURNING id, slug;
 -- Practice Exercises
 -- 1. Insert a comment from Alice on Bob's draft post; RETURNING id.
 -- 2. Update Bob's draft title to 'Draft: Better Indexes' by slug.
+-- 3. INSERT an unpublished post with slug 'tmp-delete-me', then DELETE it only if
+--    still unpublished; RETURNING id, slug from the DELETE.
 -- -----------------------------------------------------------------------------
 -- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

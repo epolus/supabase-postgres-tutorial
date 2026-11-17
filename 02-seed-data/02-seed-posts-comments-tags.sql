@@ -74,5 +74,6 @@ SET body = EXCLUDED.body;
 -- Practice Exercises
 -- 1. Seed a third published post by Alice with slug 'rls-basics'.
 -- 2. Tag that post with 'supabase' only, using ON CONFLICT DO NOTHING.
+-- 3. Seed three comments on that post with fixed uuids (Alice + Bob), ON CONFLICT upsert body.
 -- -----------------------------------------------------------------------------
 -- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

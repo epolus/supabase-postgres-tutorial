@@ -20,6 +20,7 @@ Each section mirrors the lesson path. Re-read the examples **above** the Practic
 
 1. `CHECK (char_length(…))` on `profiles`, wrapped in a `DO $$ … EXCEPTION WHEN duplicate_object` block like the other constraints here.
 2. Ask: what index does `UNIQUE (name)` on `tags` already create? A second plain index on the same column is usually redundant.
+3. `CREATE INDEX … ON public.posts (author_id, created_at DESC) WHERE published = true` — partial indexes skip rows you never query that way.
 
 ## 02 — Seed data
 
@@ -32,6 +33,7 @@ Each section mirrors the lesson path. Re-read the examples **above** the Practic
 
 1. New post id + Alice’s author id; set `published = true` and slug `rls-basics`, with the same `ON CONFLICT` style as the other posts.
 2. Look up the seeded `supabase` tag id in this file; insert into `post_tags` with `ON CONFLICT (post_id, tag_id) DO NOTHING`.
+3. Reuse the comments `INSERT` shape (fixed ids, `post_id` = the new post, mix Alice/Bob authors) with `ON CONFLICT (id) DO UPDATE SET body = EXCLUDED.body`.
 
 ## 03 — CRUD operations
 
@@ -39,16 +41,19 @@ Each section mirrors the lesson path. Re-read the examples **above** the Practic
 
 1. Flip the published filter from the first query in this lesson (`WHERE published = …`).
 2. `ORDER BY created_at DESC` plus `LIMIT` — same idea as “newest first,” but on `comments`.
+3. Start from the `GROUP BY author_id` example, but group `comments` by `post_id` and keep groups with `HAVING count(*) >= 2`.
 
 ### `03-crud-operations/02-insert-update-delete.sql`
 
 1. Seed ids: Alice’s profile uuid and Bob’s draft post uuid are listed at the top of the seed lesson; use `RETURNING id`.
 2. Scope the `UPDATE` with `WHERE slug = '…'` (Bob’s draft slug from seeds), and bump `updated_at` like the publish example.
+3. Two statements: `INSERT` a draft with that slug, then the lesson’s safer `DELETE … AND published = false RETURNING …`.
 
 ### `03-crud-operations/03-crud-with-supabase-js.ts`
 
 1. Chain `.from('profiles').select(…).eq('username', 'alice').single()` and always check `error`.
 2. `.update({ body: … }).eq('id', 'c1111111-…').select(…)` — same `{ data, error }` habit as the other helpers in this file.
+3. Reuse `deleteUnpublishedDraft` (or the same `.delete().eq('slug', …).eq('published', false).select(…)` chain).
 
 ## 04 — Joins and views
 
@@ -56,11 +61,13 @@ Each section mirrors the lesson path. Re-read the examples **above** the Practic
 
 1. Start from `comments`, `INNER JOIN` posts on `post_id`, then profiles on the **comment** `author_id` (not the post author).
 2. `LEFT JOIN` profiles from posts, then `WHERE profiles.id IS NULL` to find orphans.
+3. Same orphan trick on the junction: `LEFT JOIN post_tags`, then `WHERE post_tags.post_id IS NULL`.
 
 ### `04-joins-and-views/02-views.sql`
 
 1. Clone `published_posts_with_author`: `CREATE OR REPLACE VIEW … WITH (security_invoker = true) AS` and join `posts` → `post_tags` → `tags`.
 2. `SELECT * FROM` the view and `ORDER BY` the slug and tag-name columns you aliased.
+3. Mirror the comment-count view: `tags LEFT JOIN post_tags`, `count(DISTINCT post_id)`, `GROUP BY` tag id/name.
 
 ## 05 — Functions and triggers
 
@@ -78,6 +85,7 @@ Each section mirrors the lesson path. Re-read the examples **above** the Practic
 
 1. Mirror `count_published_posts_for`: `LANGUAGE sql`, `STABLE`, `SECURITY INVOKER`, `SET search_path = ''`, `RETURNS TABLE (…)`.
 2. After `CREATE FUNCTION`, `GRANT EXECUTE ON FUNCTION … TO authenticated` like the other rpcs in this lesson.
+3. Like `publish_my_drafts`, but flip `published` to false for one slug; mark `SECURITY DEFINER` and still check `author_id = (SELECT auth.uid())` inside.
 
 ### `05-functions-triggers/04-rpc-with-supabase-js.ts`
 
@@ -95,3 +103,4 @@ Each section mirrors the lesson path. Re-read the examples **above** the Practic
 
 1. `FOR DELETE` on `comments` with an `EXISTS (SELECT 1 FROM posts …)` so the **post** author matches `(SELECT auth.uid())`.
 2. Write it once with bare `auth.uid()`, then wrap as `(SELECT auth.uid())` — the lesson intro explains the InitPlan / per-row cost difference.
+3. Three policies on `bookmarks`: own-row `USING` / `WITH CHECK` on `profile_id = (SELECT auth.uid())` for SELECT, INSERT, DELETE (same pattern as `profiles_update_own`).

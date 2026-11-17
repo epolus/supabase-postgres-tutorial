@@ -152,5 +152,7 @@ CREATE POLICY "post_tags_delete_post_author"
 -- 1. Add a policy allowing post authors to DELETE comments on their own posts.
 -- 2. Rewrite one policy using bare auth.uid(), then change it to
 --    (select auth.uid()) and note why the select form is preferred.
+-- 3. If you created public.bookmarks, add policies so users can SELECT / INSERT /
+--    DELETE only their own rows (profile_id = auth.uid()).
 -- -----------------------------------------------------------------------------
 -- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

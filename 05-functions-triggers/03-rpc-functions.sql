@@ -50,5 +50,7 @@ GRANT EXECUTE ON FUNCTION public.publish_my_drafts() TO authenticated;
 -- Practice Exercises
 -- 1. Write public.latest_posts(limit_count int) returning id, title, slug.
 -- 2. GRANT EXECUTE on it to authenticated.
+-- 3. Write public.unpublish_my_post(target_slug text) as SECURITY DEFINER with
+--    search_path = '' that unpublishes only the caller's own post; GRANT EXECUTE.
 -- -----------------------------------------------------------------------------
 -- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

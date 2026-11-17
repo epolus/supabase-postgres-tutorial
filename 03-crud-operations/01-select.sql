@@ -34,5 +34,6 @@ GROUP BY author_id;
 -- Practice Exercises
 -- 1. Select titles of unpublished posts only.
 -- 2. Select the two most recent comments (any post).
+-- 3. List post_id values that have at least 2 comments (GROUP BY + HAVING).
 -- -----------------------------------------------------------------------------
 -- Hints: see HINTS.md · Solutions: see ANSWERS.md (same lesson path).

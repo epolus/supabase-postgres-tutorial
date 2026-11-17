@@ -46,6 +46,7 @@ ALTER TABLE public.comments
 Practice Exercises
 1. Add a CHECK that profiles.username is at least 3 characters.
 2. Create an index on tags(name) — or explain why UNIQUE already covers it.
+3. Add a partial index on posts (author_id, created_at DESC) for published rows only.
 
 ```sql
 ALTER TABLE public.profiles
@@ -55,6 +56,10 @@ ALTER TABLE public.profiles
 -- A UNIQUE constraint already creates a unique index on tags(name), so a
 -- separate CREATE INDEX on name alone is usually redundant:
 -- CREATE UNIQUE INDEX ... is what UNIQUE builds under the hood.
+
+CREATE INDEX IF NOT EXISTS posts_author_published_created_at_idx
+  ON public.posts (author_id, created_at DESC)
+  WHERE published = true;
 ```
 
 ## 02 — Seed data
@@ -97,6 +102,7 @@ SET
 Practice Exercises
 1. Seed a third published post by Alice with slug 'rls-basics'.
 2. Tag that post with 'supabase' only, using ON CONFLICT DO NOTHING.
+3. Seed three comments on that post with fixed uuids (Alice + Bob), ON CONFLICT upsert body.
 
 ```sql
 INSERT INTO public.posts (id, author_id, title, slug, body, published)
@@ -117,6 +123,29 @@ VALUES (
   'd2222222-2222-2222-2222-222222222222'
 )
 ON CONFLICT (post_id, tag_id) DO NOTHING;
+
+INSERT INTO public.comments (id, post_id, author_id, body)
+VALUES
+  (
+    'c3333333-3333-3333-3333-333333333333',
+    'cccccccc-cccc-cccc-cccc-cccccccccccc',
+    '22222222-2222-2222-2222-222222222222',
+    'Looking forward to the RLS module.'
+  ),
+  (
+    'c4444444-4444-4444-4444-444444444444',
+    'cccccccc-cccc-cccc-cccc-cccccccccccc',
+    '11111111-1111-1111-1111-111111111111',
+    'Policies next — hang tight.'
+  ),
+  (
+    'c5555555-5555-5555-5555-555555555555',
+    'cccccccc-cccc-cccc-cccc-cccccccccccc',
+    '22222222-2222-2222-2222-222222222222',
+    'Thanks for the preview.'
+  )
+ON CONFLICT (id) DO UPDATE
+SET body = EXCLUDED.body;
 ```
 
 ## 03 — CRUD operations
@@ -126,6 +155,7 @@ ON CONFLICT (post_id, tag_id) DO NOTHING;
 Practice Exercises
 1. Select titles of unpublished posts only.
 2. Select the two most recent comments (any post).
+3. List post_id values that have at least 2 comments (GROUP BY + HAVING).
 
 ```sql
 SELECT id, title, slug
@@ -136,6 +166,11 @@ SELECT id, post_id, body, created_at
 FROM public.comments
 ORDER BY created_at DESC
 LIMIT 2;
+
+SELECT post_id, count(*) AS comment_count
+FROM public.comments
+GROUP BY post_id
+HAVING count(*) >= 2;
 ```
 
 ### `03-crud-operations/02-insert-update-delete.sql`
@@ -143,6 +178,7 @@ LIMIT 2;
 Practice Exercises
 1. Insert a comment from Alice on Bob's draft post; RETURNING id.
 2. Update Bob's draft title to 'Draft: Better Indexes' by slug.
+3. INSERT an unpublished post with slug 'tmp-delete-me', then DELETE it only if still unpublished; RETURNING id, slug from the DELETE.
 
 ```sql
 INSERT INTO public.comments (post_id, author_id, body)
@@ -157,6 +193,20 @@ UPDATE public.posts
 SET title = 'Draft: Better Indexes', updated_at = now()
 WHERE slug = 'draft-index-thoughts'
 RETURNING id, title;
+
+INSERT INTO public.posts (author_id, title, slug, body, published)
+VALUES (
+  '11111111-1111-1111-1111-111111111111',
+  'Temporary delete target',
+  'tmp-delete-me',
+  'Safe to remove.',
+  false
+);
+
+DELETE FROM public.posts
+WHERE slug = 'tmp-delete-me'
+  AND published = false
+RETURNING id, slug;
 ```
 
 ### `03-crud-operations/03-crud-with-supabase-js.ts`
@@ -164,6 +214,7 @@ RETURNING id, title;
 Practice Exercises
 1. Fetch profile username + display_name for alice.
 2. Update comment c1111111-... body via .update().eq('id', ...).
+3. Delete an unpublished draft by slug via .delete().eq('slug', ...).eq('published', false).
 
 ```ts
 const { data, error } = await supabase
@@ -181,6 +232,15 @@ const { data: updated, error: updateError } = await supabase
   .select('id, body')
 if (updateError) console.error(updateError.message)
 else console.log(updated)
+
+const { data: deleted, error: deleteError } = await supabase
+  .from('posts')
+  .delete()
+  .eq('slug', 'tmp-delete-me')
+  .eq('published', false)
+  .select('id, slug')
+if (deleteError) console.error(deleteError.message)
+else console.log(deleted)
 ```
 
 ## 04 — Joins and views
@@ -191,6 +251,7 @@ Practice Exercises
 1. List each comment with the post slug and the commenter's display_name.
 2. LEFT JOIN profiles to posts so you could spot posts with a missing author
    (should be empty if FKs are healthy).
+3. List posts that have no tags (LEFT JOIN post_tags, filter where the join is NULL).
 
 ```sql
 SELECT
@@ -208,6 +269,14 @@ SELECT
 FROM public.posts AS p
 LEFT JOIN public.profiles AS pr ON pr.id = p.author_id
 WHERE pr.id IS NULL;
+
+SELECT
+  p.id,
+  p.title,
+  p.slug
+FROM public.posts AS p
+LEFT JOIN public.post_tags AS pt ON pt.post_id = p.id
+WHERE pt.post_id IS NULL;
 ```
 
 ### `04-joins-and-views/02-views.sql`
@@ -215,6 +284,7 @@ WHERE pr.id IS NULL;
 Practice Exercises
 1. Create view public.post_tags_list (security_invoker) with post slug + tag name.
 2. SELECT from it ordered by slug, name.
+3. Create view public.tag_post_counts (security_invoker) with tag name + COUNT of posts.
 
 ```sql
 CREATE OR REPLACE VIEW public.post_tags_list
@@ -229,6 +299,19 @@ INNER JOIN public.tags AS t ON t.id = pt.tag_id;
 
 SELECT * FROM public.post_tags_list
 ORDER BY post_slug, tag_name;
+
+CREATE OR REPLACE VIEW public.tag_post_counts
+WITH (security_invoker = true)
+AS
+SELECT
+  t.name AS tag_name,
+  count(DISTINCT pt.post_id) AS post_count
+FROM public.tags AS t
+LEFT JOIN public.post_tags AS pt ON pt.tag_id = t.id
+GROUP BY t.id, t.name;
+
+SELECT * FROM public.tag_post_counts
+ORDER BY tag_name;
 ```
 
 ## 05 — Functions and triggers
@@ -274,6 +357,7 @@ Practice Exercises
 Practice Exercises
 1. Write public.latest_posts(limit_count int) returning id, title, slug.
 2. GRANT EXECUTE on it to authenticated.
+3. Write public.unpublish_my_post(target_slug text) as SECURITY DEFINER with search_path = '' that unpublishes only the caller's own post; GRANT EXECUTE.
 
 ```sql
 CREATE OR REPLACE FUNCTION public.latest_posts(limit_count int DEFAULT 10)
@@ -291,6 +375,30 @@ AS $$
 $$;
 
 GRANT EXECUTE ON FUNCTION public.latest_posts(int) TO authenticated;
+
+CREATE OR REPLACE FUNCTION public.unpublish_my_post(target_slug text)
+RETURNS public.posts
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+DECLARE
+  updated_row public.posts;
+BEGIN
+  -- DEFINER + locked search_path; ownership still enforced in the WHERE.
+  UPDATE public.posts AS p
+  SET
+    published = false,
+    updated_at = now()
+  WHERE p.slug = target_slug
+    AND p.author_id = (SELECT auth.uid())
+  RETURNING p.* INTO updated_row;
+
+  RETURN updated_row;
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.unpublish_my_post(text) TO authenticated;
 ```
 
 ### `05-functions-triggers/04-rpc-with-supabase-js.ts`
@@ -330,6 +438,8 @@ Practice Exercises
 1. Add a policy allowing post authors to DELETE comments on their own posts.
 2. Rewrite one policy using bare auth.uid(), then change it to
    (select auth.uid()) and note why the select form is preferred.
+3. If you created public.bookmarks, add policies so users can SELECT / INSERT /
+   DELETE only their own rows (profile_id = auth.uid()).
 
 ```sql
 DROP POLICY IF EXISTS "comments_delete_post_author" ON public.comments;
@@ -348,5 +458,26 @@ CREATE POLICY "comments_delete_post_author"
 
 -- Prefer (SELECT auth.uid()) so the uid is evaluated once per statement
 -- (InitPlan) instead of per-row as a volatile function call.
+
+DROP POLICY IF EXISTS "bookmarks_select_own" ON public.bookmarks;
+CREATE POLICY "bookmarks_select_own"
+  ON public.bookmarks
+  FOR SELECT
+  TO authenticated
+  USING (profile_id = (SELECT auth.uid()));
+
+DROP POLICY IF EXISTS "bookmarks_insert_own" ON public.bookmarks;
+CREATE POLICY "bookmarks_insert_own"
+  ON public.bookmarks
+  FOR INSERT
+  TO authenticated
+  WITH CHECK (profile_id = (SELECT auth.uid()));
+
+DROP POLICY IF EXISTS "bookmarks_delete_own" ON public.bookmarks;
+CREATE POLICY "bookmarks_delete_own"
+  ON public.bookmarks
+  FOR DELETE
+  TO authenticated
+  USING (profile_id = (SELECT auth.uid()));
 ```
 

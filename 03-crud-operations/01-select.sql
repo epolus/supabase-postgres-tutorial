@@ -35,17 +35,4 @@ GROUP BY author_id;
 -- 1. Select titles of unpublished posts only.
 -- 2. Select the two most recent comments (any post).
 -- -----------------------------------------------------------------------------
-
-/*
--- Solutions
-
-SELECT id, title, slug
-FROM public.posts
-WHERE published = false;
-
-SELECT id, post_id, body, created_at
-FROM public.comments
-ORDER BY created_at DESC
-LIMIT 2;
-
-*/
+-- Solutions: see ANSWERS.md (same lesson path).

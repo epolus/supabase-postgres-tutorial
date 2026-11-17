@@ -68,14 +68,4 @@ WHERE id = '44444444-4444-4444-4444-444444444444';
 -- 1. Extend handle_new_user to copy bio from raw_user_meta_data->>'bio' when set.
 -- 2. Explain why ON CONFLICT DO NOTHING is useful if you also seed profiles.
 -- -----------------------------------------------------------------------------
-
-/*
--- Solutions
-
--- In the INSERT column list add bio, and in VALUES:
---   NEW.raw_user_meta_data ->> 'bio'
---
--- ON CONFLICT DO NOTHING: seed scripts (module 02) may insert the profile
--- before or after Auth. Ignoring conflicts keeps signup and seeds compatible.
-
-*/
+-- Solutions: see ANSWERS.md (same lesson path).

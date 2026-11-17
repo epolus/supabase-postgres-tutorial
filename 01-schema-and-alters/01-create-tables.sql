@@ -53,16 +53,4 @@ CREATE TABLE IF NOT EXISTS public.post_tags (
 -- 1. Add a table public.bookmarks with id, profile_id, post_id, and created_at.
 -- 2. Ensure bookmarks uniquely pair one profile with one post.
 -- -----------------------------------------------------------------------------
-
-/*
--- Solutions (uncomment to try / compare)
-
-CREATE TABLE IF NOT EXISTS public.bookmarks (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  profile_id uuid NOT NULL REFERENCES public.profiles (id) ON DELETE CASCADE,
-  post_id uuid NOT NULL REFERENCES public.posts (id) ON DELETE CASCADE,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  UNIQUE (profile_id, post_id)
-);
-
-*/
+-- Solutions: see ANSWERS.md (same lesson path).

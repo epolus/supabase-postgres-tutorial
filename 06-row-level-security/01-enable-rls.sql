@@ -34,12 +34,4 @@ ORDER BY c.relname;
 -- 1. Enable RLS on public.bookmarks if you created that practice table in 01.
 -- 2. Query pg_policies for public.posts (expect few/none until lesson 02).
 -- -----------------------------------------------------------------------------
-
-/*
--- Solutions
-
-ALTER TABLE public.bookmarks ENABLE ROW LEVEL SECURITY;
-
-SELECT * FROM pg_policies WHERE schemaname = 'public' AND tablename = 'posts';
-
-*/
+-- Solutions: see ANSWERS.md (same lesson path).

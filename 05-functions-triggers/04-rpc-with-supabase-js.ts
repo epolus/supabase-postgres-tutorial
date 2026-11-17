@@ -52,14 +52,5 @@ main().catch((err) => {
  * 1. Call latest_posts with limit_count: 5 (after creating it in 03).
  * 2. Log a clear message when error is non-null vs when data is empty.
  *
- * Solutions (reference):
- *
- * const { data, error } = await supabase.rpc('latest_posts', { limit_count: 5 })
- * if (error) {
- *   console.error('latest_posts failed:', error.message)
- * } else if (!data?.length) {
- *   console.log('No published posts yet')
- * } else {
- *   console.log(data)
- * }
+ * Solutions: see ANSWERS.md (same lesson path).
  * --------------------------------------------------------------------------- */

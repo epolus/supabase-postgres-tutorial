@@ -100,21 +100,5 @@ main().catch((err) => {
  * 1. Fetch profile username + display_name for alice.
  * 2. Update comment c1111111-... body via .update().eq('id', ...).
  *
- * Solutions (reference):
- *
- * const { data, error } = await supabase
- *   .from('profiles')
- *   .select('username, display_name')
- *   .eq('username', 'alice')
- *   .single()
- * if (error) console.error(error.message)
- * else console.log(data)
- *
- * const { data: updated, error: updateError } = await supabase
- *   .from('comments')
- *   .update({ body: 'Edited from the SDK' })
- *   .eq('id', 'c1111111-1111-1111-1111-111111111111')
- *   .select('id, body')
- * if (updateError) console.error(updateError.message)
- * else console.log(updated)
+ * Solutions: see ANSWERS.md (same lesson path).
  * --------------------------------------------------------------------------- */

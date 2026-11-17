@@ -76,16 +76,4 @@ CREATE INDEX IF NOT EXISTS post_tags_tag_id_idx
 -- 1. Add a CHECK that profiles.username is at least 3 characters.
 -- 2. Create an index on tags(name) — or explain why UNIQUE already covers it.
 -- -----------------------------------------------------------------------------
-
-/*
--- Solutions
-
-ALTER TABLE public.profiles
-  ADD CONSTRAINT profiles_username_min_length
-  CHECK (char_length(username) >= 3);
-
--- A UNIQUE constraint already creates a unique index on tags(name), so a
--- separate CREATE INDEX on name alone is usually redundant:
--- CREATE UNIQUE INDEX ... is what UNIQUE builds under the hood.
-
-*/
+-- Solutions: see ANSWERS.md (same lesson path).
